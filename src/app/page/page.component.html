@@ -1,0 +1,100 @@
+<div class="page">
+  <div class="page__content">
+    <span class="page__content__group">
+      <label class="page__content__group__label"
+        >1. What shall we create today:</label
+      >
+      <span>
+        <p-autoComplete
+          [(ngModel)]="selectedCategory"
+          [suggestions]="filteredCategory"
+          (completeMethod)="filterCategory($event)"
+          field="name"
+          [dropdown]="true"
+        >
+          <ng-template let-category pTemplate="item">
+            <div class="category-item">
+              <div>{{ category.name }}</div>
+            </div>
+          </ng-template>
+        </p-autoComplete>
+      </span>
+      <button
+        *ngIf="this.selectedCategory.length == 0"
+        class="page__content__group__button cursor-notallowed"
+      >
+        Submit
+      </button>
+      <button
+        *ngIf="this.selectedCategory.length != 0"
+        class="page__content__group__button cursor-pointer"
+        (click)="showTopicsMethod()"
+      >
+        Submit
+      </button>
+    </span>
+
+    <span
+      *ngIf="showTopics && this.selectedCategory.length != 0"
+      class="page__content__group"
+    >
+      <label class="page__content__group__label"
+        >2.a. What topic shall these questions support?</label
+      >
+      <span>
+        <p-autoComplete
+          [(ngModel)]="selectedTopic"
+          [suggestions]="filteredTopics"
+          (completeMethod)="filterTopic($event)"
+          field="name"
+          [dropdown]="true"
+        >
+          <ng-template let-topic pTemplate="item">
+            <div class="topic-item">
+              <div>{{ topic.name }}</div>
+            </div>
+          </ng-template>
+        </p-autoComplete>
+      </span>
+      <button
+        *ngIf="this.selectedTopic.length == 0"
+        class="page__content__group__button cursor-notallowed"
+      >
+        Submit
+      </button>
+      <button
+        *ngIf="this.selectedTopic.length != 0"
+        class="page__content__group__button cursor-pointer"
+        (click)="showParaMethod()"
+      >
+        Submit
+      </button>
+    </span>
+
+    <span
+      *ngIf="showPara && this.selectedTopic.length != 0"
+      class="page__content__group"
+      style="width: 25rem"
+    >
+      <label class="page__content__group__label"
+        >2.b. Do you have existing materials from which to create these
+        questions? If so, cut and paste your content into the space below, up to
+        5,000 characters or roughly 500 words. If not, click continue.
+      </label>
+      <textarea> </textarea>
+      <button
+        *ngIf="this.selectedTopic.length == 0"
+        class="page__content__group__button cursor-notallowed"
+      >
+        Continue
+      </button>
+      <button
+        *ngIf="this.selectedTopic.length != 0"
+        class="page__content__group__button cursor-pointer"
+        (click)="showParaMethod()"
+      >
+        Continue
+      </button>
+    </span>
+  </div>
+</div>
