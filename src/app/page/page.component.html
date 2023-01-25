@@ -57,13 +57,13 @@
         </p-autoComplete>
       </span>
       <button
-        *ngIf="this.selectedTopic.length == 0"
+        *ngIf="this.selectedTopic.name.length == 0"
         class="page__content__group__button cursor-notallowed"
       >
         Submit
       </button>
       <button
-        *ngIf="this.selectedTopic.length != 0"
+        *ngIf="this.selectedTopic.name.length != 0"
         class="page__content__group__button cursor-pointer"
         (click)="showParaMethod()"
       >
@@ -72,7 +72,7 @@
     </span>
 
     <span
-      *ngIf="showPara && this.selectedTopic.length != 0"
+      *ngIf="showPara && this.selectedTopic.name.length != 0"
       class="page__content__group"
       style="width: 25rem"
     >
@@ -81,17 +81,153 @@
         questions? If so, cut and paste your content into the space below, up to
         5,000 characters or roughly 500 words. If not, click continue.
       </label>
-      <textarea> </textarea>
+      <textarea
+        rows="10"
+        [(ngModel)]="clientInputOne"
+        [disabled]="isClientInputOneDisabled"
+        class="page__content__group__clientInput p-1"
+      >
+      </textarea>
+      <span class="d-flex justify-end">
+        <button
+          class="page__content__group__txarea-button cursor-pointer"
+          (click)="clientInputOneSkipper()"
+        >
+          Skip
+        </button>
+        <button
+          *ngIf="this.clientInputOne.length == 0"
+          class="page__content__group__button-nomargin cursor-notallowed"
+        >
+          Continue
+        </button>
+        <button
+          *ngIf="this.clientInputOne.length != 0"
+          class="page__content__group__button-nomargin cursor-pointer"
+          (click)="clientInputOneMethod()"
+        >
+          Continue
+        </button>
+      </span>
+    </span>
+    <span
+      *ngIf="
+        (showQuestionNumber && this.clientInputOne.length != 0) ||
+        (showQuestionNumber && this.clientInputOneSkipped)
+      "
+      class="page__content__group"
+    >
+      <label class="page__content__group__label"
+        >2.c How many questions do you want to create (1-5)?</label
+      >
+      <span>
+        <p-autoComplete
+          [(ngModel)]="selectedQuestionNum"
+          [suggestions]="filteredQuestionNumbers"
+          (completeMethod)="filterQuestionNumber($event)"
+          field="number"
+          [dropdown]="true"
+        >
+          <ng-template let-questionNumber pTemplate="item">
+            <div class="questionNumber-item">
+              <div>{{ questionNumber.number }}</div>
+            </div>
+          </ng-template>
+        </p-autoComplete>
+      </span>
       <button
-        *ngIf="this.selectedTopic.length == 0"
+        *ngIf="this.selectedQuestionNum.number.length == 0"
         class="page__content__group__button cursor-notallowed"
       >
-        Continue
+        Submit
       </button>
       <button
-        *ngIf="this.selectedTopic.length != 0"
+        *ngIf="this.selectedQuestionNum.number.length != 0"
         class="page__content__group__button cursor-pointer"
-        (click)="showParaMethod()"
+        (click)="showLearningLevelMethod()"
+      >
+        Submit
+      </button>
+    </span>
+    <span *ngIf="this.showLearningLevel">
+      <label class="page__content__group__label"
+        >2.d. What learning level should this question support?</label
+      >
+      <div
+        *ngFor="let learningLevel of learningLevels"
+        class="p-field-checkbox mt-1"
+      >
+        <p-checkbox
+          name="group2"
+          value="category"
+          [value]="learningLevel"
+          [(ngModel)]="selectedLearningLevel"
+          [inputId]="learningLevel.key"
+        ></p-checkbox>
+        <label class="ml-1" [for]="learningLevel.key">{{
+          learningLevel.name
+        }}</label>
+      </div>
+      <span class="d-flex justify-end">
+        <button
+          *ngIf="this.selectedLearningLevel.length == 0"
+          class="page__content__group__button-nomargin cursor-notallowed mt-1"
+        >
+          Submit
+        </button>
+        <button
+          *ngIf="this.selectedLearningLevel.length != 0"
+          class="page__content__group__button-nomargin cursor-pointer mt-1"
+          (click)="learningLevelMethod()"
+        >
+          Submit
+        </button>
+      </span>
+    </span>
+    <span
+      *ngIf="showClientInputTwo && this.selectedLearningLevel.length != 0"
+      class="page__content__group"
+      style="width: 25rem"
+    >
+      <label class="page__content__group__label"
+        >2. e. [this only appears if no content is entered]If their particular
+        focus you’d like these questions to support? For example, if the topic
+        is workspace safety, you might say “the signs to look for to prevent
+        workplace violence before it happens”. If not, click continue.
+      </label>
+      <textarea
+        rows="10"
+        [(ngModel)]="clientInputTwo"
+        class="page__content__group__clientInput p-1"
+      >
+      </textarea>
+      <span class="d-flex justify-end">
+        <button
+          *ngIf="this.clientInputTwo.length == 0"
+          class="page__content__group__button-nomargin cursor-notallowed"
+        >
+          Continue
+        </button>
+        <button
+          *ngIf="this.clientInputTwo.length != 0"
+          class="page__content__group__button-nomargin cursor-pointer"
+          (click)="clientInputTwoMethod()"
+        >
+          Continue
+        </button>
+      </span>
+    </span>
+    <span
+      *ngIf="this.finalQuestion.length != 0"
+      class="page__content__group__finalQuestion"
+      >Final Question is: <br />
+      <br />
+      {{ this.finalQuestion }}</span
+    >
+    <span class="d-flex justify-end">
+      <button
+        *ngIf="this.finalQuestion.length != 0"
+        class="page__content__group__button-nomargin cursor-pointer"
       >
         Continue
       </button>

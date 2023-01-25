@@ -13,11 +13,39 @@
         font-family: Poppins;
         font-size: 16px;
       }
+      &__finalQuestion {
+        font-family: Poppins;
+        font-size: 16px;
+        max-width: 26.3rem;
+      }
+      &__clientInput {
+        min-width: 26.3rem;
+      }
       &__button {
         padding: 10px 75px 10px 32px;
         border-radius: 5px;
         width: 5rem;
         margin-left: auto;
+        border: none;
+        background: lightseagreen;
+        color: white;
+        cursor: pointer;
+        &-nomargin {
+          padding: 10px 75px 10px 32px;
+          border-radius: 5px;
+          width: 5rem;
+          border: none;
+          background: lightseagreen;
+          color: white;
+          cursor: pointer;
+          margin-left: 0;
+        }
+      }
+      &__txarea-button {
+        padding: 10px 75px 10px 32px;
+        border-radius: 5px;
+        width: 5rem;
+        margin-right: 1rem;
         border: none;
         background: lightseagreen;
         color: white;

@@ -3,6 +3,43 @@
 @import "../node_modules/primeng/resources/themes/saga-blue/theme.css";
 @import "../node_modules/primeng/resources/primeng.min.css";
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+$sides: (
+  "t": top,
+  "r": right,
+  "b": bottom,
+  "l": left,
+);
+
 .p-autocomplete {
-  width: 25rem !important;
+  width: 26.3rem !important;
+}
+
+.d {
+  &-flex {
+    display: flex;
+  }
+}
+
+.justify {
+  &-end {
+    justify-content: end;
+  }
+}
+
+@for $i from 0 through 10 {
+  .p-#{$i} {
+    padding: ($i) + rem;
+  }
+  .m-#{$i} {
+    margin: ($i) + rem;
+  }
+  @each $side, $j in $sides {
+    .p#{$side}-#{$i} {
+      padding-#{$j}: ($i) + rem;
+    }
+    .m#{$side}-#{$i} {
+      margin-#{$j}: ($i) + rem;
+    }
+  }
 }
