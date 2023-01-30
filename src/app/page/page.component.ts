@@ -47,10 +47,9 @@ export class PageComponent {
   selectedLearningLevel: { name: ""; key: "" }[] = [];
 
   learningLevels: any[] = [
-    { name: "Accounting", key: "A" },
-    { name: "Marketing", key: "M" },
-    { name: "Production", key: "P" },
-    { name: "Research", key: "R" },
+    { name: "Awareness", key: "A" },
+    { name: "Explanatory", key: "M" },
+    { name: "Practitioner", key: "P" }
   ];
 
   showLearningLevel: boolean = false;
@@ -184,7 +183,7 @@ export class PageComponent {
         this.selectedQuestionNum.number
       } questions on ${
         this.selectedTopic.name
-      } with based on the content I entered supporting ${selectedNames.toString()}`;
+      } with based on the content ${this.clientInputOne} supporting ${selectedNames.toString()}`;
     } else if (isInputOneSkipped) {
       this.finalQuestion = `Generate ${
         this.selectedQuestionNum.number

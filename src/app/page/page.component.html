@@ -23,14 +23,14 @@
         *ngIf="this.selectedCategory.length == 0"
         class="page__content__group__button cursor-notallowed"
       >
-        Submit
+        Continue
       </button>
       <button
         *ngIf="this.selectedCategory.length != 0"
         class="page__content__group__button cursor-pointer"
         (click)="showTopicsMethod()"
       >
-        Submit
+        Continue
       </button>
     </span>
 
@@ -60,14 +60,14 @@
         *ngIf="this.selectedTopic.name.length == 0"
         class="page__content__group__button cursor-notallowed"
       >
-        Submit
+        Continue
       </button>
       <button
         *ngIf="this.selectedTopic.name.length != 0"
         class="page__content__group__button cursor-pointer"
         (click)="showParaMethod()"
       >
-        Submit
+        Continue
       </button>
     </span>
 
@@ -139,14 +139,14 @@
         *ngIf="this.selectedQuestionNum.number.length == 0"
         class="page__content__group__button cursor-notallowed"
       >
-        Submit
+        Continue
       </button>
       <button
         *ngIf="this.selectedQuestionNum.number.length != 0"
         class="page__content__group__button cursor-pointer"
         (click)="showLearningLevelMethod()"
       >
-        Submit
+        Continue
       </button>
     </span>
     <span *ngIf="this.showLearningLevel">
@@ -173,14 +173,14 @@
           *ngIf="this.selectedLearningLevel.length == 0"
           class="page__content__group__button-nomargin cursor-notallowed mt-1"
         >
-          Submit
+          Continue
         </button>
         <button
           *ngIf="this.selectedLearningLevel.length != 0"
           class="page__content__group__button-nomargin cursor-pointer mt-1"
           (click)="learningLevelMethod()"
         >
-          Submit
+          Continue
         </button>
       </span>
     </span>
@@ -206,14 +206,14 @@
           *ngIf="this.clientInputTwo.length == 0"
           class="page__content__group__button-nomargin cursor-notallowed"
         >
-          Continue
+          Generate
         </button>
         <button
           *ngIf="this.clientInputTwo.length != 0"
           class="page__content__group__button-nomargin cursor-pointer"
           (click)="clientInputTwoMethod()"
         >
-          Continue
+        Generate
         </button>
       </span>
     </span>
@@ -229,7 +229,7 @@
         *ngIf="this.finalQuestion.length != 0"
         class="page__content__group__button-nomargin cursor-pointer"
       >
-        Continue
+        Submit to ChatGPT
       </button>
     </span>
   </div>
