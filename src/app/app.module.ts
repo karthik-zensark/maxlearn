@@ -8,11 +8,13 @@ import { CheckboxModule } from "primeng/checkbox";
 import { FormsModule } from "@angular/forms";
 import { AccordionModule } from "primeng/accordion"; //accordion and accordion tab
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [AppComponent, PageComponent],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AutoCompleteModule,
     CheckboxModule,
     FormsModule,

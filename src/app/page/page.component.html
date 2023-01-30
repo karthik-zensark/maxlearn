@@ -1,4 +1,4 @@
-<div class="page">
+<div class="page" (scroll)="scrolled($event)" #scrollFrame>
   <div class="page__content">
     <span class="page__content__group">
       <label class="page__content__group__label"
@@ -168,7 +168,7 @@
           learningLevel.name
         }}</label>
       </div>
-      <span class="d-flex justify-end">
+      <span *ngIf="clientInputOneSkipped" class="d-flex justify-end pt-1">
         <button
           *ngIf="this.selectedLearningLevel.length == 0"
           class="page__content__group__button-nomargin cursor-notallowed mt-1"
@@ -181,6 +181,21 @@
           (click)="learningLevelMethod()"
         >
           Continue
+        </button>
+      </span>
+      <span *ngIf="!clientInputOneSkipped" class="d-flex justify-center pt-1">
+        <button
+          *ngIf="this.selectedLearningLevel.length == 0"
+          class="page__content__group__button-nomargin cursor-notallowed"
+        >
+          Generate
+        </button>
+        <button
+          *ngIf="this.selectedLearningLevel.length != 0"
+          class="page__content__group__button-nomargin cursor-pointer"
+          (click)="learningLevelMethod()"
+        >
+          Generate
         </button>
       </span>
     </span>
@@ -201,7 +216,7 @@
         class="page__content__group__clientInput p-1"
       >
       </textarea>
-      <span class="d-flex justify-end">
+      <span class="d-flex justify-center">
         <button
           *ngIf="this.clientInputTwo.length == 0"
           class="page__content__group__button-nomargin cursor-notallowed"
@@ -213,24 +228,25 @@
           class="page__content__group__button-nomargin cursor-pointer"
           (click)="clientInputTwoMethod()"
         >
-        Generate
+          Generate
         </button>
       </span>
     </span>
-    <span
-      *ngIf="this.finalQuestion.length != 0"
-      class="page__content__group__finalQuestion"
-      >Final Question is: <br />
-      <br />
-      {{ this.finalQuestion }}</span
-    >
-    <span class="d-flex justify-end">
-      <button
-        *ngIf="this.finalQuestion.length != 0"
-        class="page__content__group__button-nomargin cursor-pointer"
-      >
-        Submit to ChatGPT
-      </button>
-    </span>
   </div>
+</div>
+<div *ngIf="this.finalQuestion.length != 0" class="p-3">
+  <div class="text-center page__content__group__finalQuestion-heading py-1">
+    Final Question is:
+  </div>
+  <span class="d-flex justify-center page__content__group__finalQuestion py-1">
+    {{ this.finalQuestion }}</span
+  >
+  <span class="d-flex justify-center py-1">
+    <button
+      class="page__content__group__button-nomargin cursor-pointer"
+      (click)="sendToChatGptClient()"
+    >
+      Submit to ChatGPT
+    </button>
+  </span>
 </div>

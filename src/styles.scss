@@ -5,11 +5,29 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 $sides: (
+  "auto": auto,
   "t": top,
   "r": right,
   "b": bottom,
   "l": left,
+  "x": (
+    left,
+    right,
+  ),
+  "y": (
+    top,
+    bottom,
+  ),
 );
+
+$positions: (
+  "end": end,
+  "center": center,
+);
+
+body {
+  font-family: poppins !important;
+}
 
 .p-autocomplete {
   width: 26.3rem !important;
@@ -21,9 +39,12 @@ $sides: (
   }
 }
 
-.justify {
-  &-end {
-    justify-content: end;
+@each $pos, $posValue in $positions {
+  .justify-#{$pos} {
+    justify-content: ($posValue);
+  }
+  .text-#{$pos} {
+    text-align: ($posValue);
   }
 }
 
@@ -35,11 +56,38 @@ $sides: (
     margin: ($i) + rem;
   }
   @each $side, $j in $sides {
-    .p#{$side}-#{$i} {
-      padding-#{$j}: ($i) + rem;
-    }
-    .m#{$side}-#{$i} {
-      margin-#{$j}: ($i) + rem;
+    @if $side == "auto" {
+      .m-#{$side} {
+        margin: ($j);
+      }
+      .p-#{$side} {
+        padding: ($j);
+      }
+    } @else if $side == "x" {
+      @each $jside in $j {
+        .m#{$side}-#{$i} {
+          margin-#{$jside}: ($i) + rem;
+        }
+        .p#{$side}-#{$i} {
+          padding-#{$jside}: ($i) + rem;
+        }
+      }
+    } @else if $side == "y" {
+      @each $jside in $j {
+        .m#{$side}-#{$i} {
+          margin-#{$jside}: ($i) + rem;
+        }
+        .p#{$side}-#{$i} {
+          padding-#{$jside}: ($i) + rem;
+        }
+      }
+    } @else {
+      .m#{$side}-#{$i} {
+        margin-#{$j}: ($i) + rem;
+      }
+      .p#{$side}-#{$i} {
+        padding-#{$j}: ($i) + rem;
+      }
     }
   }
 }

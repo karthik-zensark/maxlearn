@@ -1,11 +1,27 @@
-import { Component } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from "@angular/core";
+import { ApiService } from "../services/api.service";
 
 @Component({
   selector: "app-page",
   templateUrl: "./page.component.html",
   styleUrls: ["./page.component.scss"],
 })
-export class PageComponent {
+export class PageComponent implements AfterViewInit {
+  @ViewChild("scrollFrame", { static: false })
+  scrollFrame!: ElementRef;
+  // @ViewChildren("scrollFrame") itemElements!: QueryList<any>;
+  scrollContainer: any;
+  isNearBottom: boolean = false;
+  ifItems: string[] = [];
+
   selectedCategory: any[] = [];
   filteredCategory: any = [];
   category: any[] = [
@@ -49,7 +65,7 @@ export class PageComponent {
   learningLevels: any[] = [
     { name: "Awareness", key: "A" },
     { name: "Explanatory", key: "M" },
-    { name: "Practitioner", key: "P" }
+    { name: "Practitioner", key: "P" },
   ];
 
   showLearningLevel: boolean = false;
@@ -60,7 +76,17 @@ export class PageComponent {
 
   finalQuestion: string = "";
 
+  constructor(private apiService: ApiService) {}
+
   ngOnInit(): void {}
+
+  ngAfterViewInit() {
+    this.scrollContainer = this.scrollFrame.nativeElement;
+    // this.itemElements.changes.subscribe((_) => {
+    //   console.log("syke");
+    //   this.onItemElementsChanged();
+    // });
+  }
 
   showTopicsMethod() {
     if (this.selectedCategory.length == 0) {
@@ -115,6 +141,7 @@ export class PageComponent {
     } else if (this.clientInputOne.length != 0) {
       this.clientInputOneSkipped = false;
       this.showQuestionNumber = true;
+      this.scrollToBottom();
     }
   }
 
@@ -122,6 +149,7 @@ export class PageComponent {
     this.isClientInputOneDisabled = true;
     this.clientInputOneSkipped = true;
     this.showQuestionNumber = true;
+    this.scrollToBottom();
   }
 
   filterQuestionNumber(event: any) {
@@ -143,6 +171,7 @@ export class PageComponent {
   showLearningLevelMethod() {
     if (this.selectedQuestionNum.number.length != 0) {
       this.showLearningLevel = true;
+      this.scrollToBottom();
     } else {
       this.showLearningLevel = false;
     }
@@ -152,6 +181,7 @@ export class PageComponent {
     console.log(this.clientInputOneSkipped);
     if (this.clientInputOneSkipped && this.selectedLearningLevel.length != 0) {
       this.showClientInputTwo = true;
+      this.scrollToBottom();
     } else if (
       !this.clientInputOneSkipped &&
       this.selectedLearningLevel.length != 0
@@ -168,11 +198,11 @@ export class PageComponent {
   }
 
   generateFinalQuestion(isInputOneSkipped: boolean) {
+    this.scrollToBottom();
     console.log("selectedQuestionNumber: ", this.selectedQuestionNum);
     console.log("selectedTopic: ", this.selectedTopic);
     console.log("clientInputOne: ", this.clientInputOne);
     console.log("selectedLearningLevel: ", this.selectedLearningLevel);
-
     const selectedNames: string[] = [];
     this.selectedLearningLevel.forEach((selectedLevel) => {
       selectedNames.push(selectedLevel.name);
@@ -181,16 +211,84 @@ export class PageComponent {
     if (!isInputOneSkipped) {
       this.finalQuestion = `Generate ${
         this.selectedQuestionNum.number
-      } questions on ${
+      } ${this.questionTagChanger(this.selectedQuestionNum.number)} on ${
         this.selectedTopic.name
-      } with based on the content ${this.clientInputOne} supporting ${selectedNames.toString()}`;
+      } with based on the content ${
+        this.clientInputOne
+      } supporting ${selectedNames.toString()}`;
     } else if (isInputOneSkipped) {
       this.finalQuestion = `Generate ${
         this.selectedQuestionNum.number
-      } questions on ${this.selectedTopic.name} with a focus on ${
+      } ${this.questionTagChanger(this.selectedQuestionNum.number)} on ${
+        this.selectedTopic.name
+      } with a focus on ${
         this.clientInputTwo
       } supporting ${selectedNames.toString()}`;
     }
     console.log("Final Question is: ", this.finalQuestion);
   }
+
+  questionTagChanger(numberOfQuestions: string): string {
+    if (parseInt(numberOfQuestions) > 1) {
+      return "questions";
+    } else {
+      return "question";
+    }
+  }
+
+  // @HostListener("window:scroll", [])
+  isUserNearBottom(): boolean {
+    const threshold = 1000;
+    // const position =
+    //   this.scrollContainer.scrollTop + this.scrollContainer.offsetHeight;
+    const position = window.scrollY + window.innerHeight; // <- Measure position differently
+    // const height = this.scrollContainer.scrollHeight;
+    const height = document.body.scrollHeight;
+    // <- Measure height differently
+    console.log(position, height - threshold);
+    return position > height - threshold;
+  }
+
+  @HostListener("window:scroll", ["$event"]) // <- Add scroll listener to window
+  scrolled(event: any): void {
+    this.isNearBottom = this.isUserNearBottom();
+  }
+
+  scrollToBottom(): void {
+    setTimeout(() => {
+      this.isNearBottom = this.isUserNearBottom();
+      // console.log("is near bottom ? ", this.isNearBottom);
+      if (this.isNearBottom) {
+        window.scroll({
+          // <- Scroll window instead of scrollContainer
+          top: this.scrollContainer.scrollHeight,
+          left: 0,
+          behavior: "smooth",
+        });
+      }
+    }, 20);
+  }
+
+  sendToChatGptClient() {
+    this.apiService.sendGeneratedQuestionApi(this.finalQuestion).subscribe(
+      (response: any) => {
+        console.log("Response from sendGeneratedQuestionApi() is: ", response);
+        console.log("Successfully sent to chatGPT client :)");
+      },
+      (error) => {
+        console.log(
+          "There has been an error sending the generated question. err is: ",
+          error
+        );
+      }
+    );
+  }
+
+  // onItemElementsChanged(): void {
+  //   console.log("onItemElementsChanged triggered");
+  //   this.isUserNearBottom();
+  //   if (this.isNearBottom) {
+  //     this.scrollToBottom();
+  //   }
+  // }
 }
