@@ -240,10 +240,10 @@ export class PageComponent implements AfterViewInit {
     numberOfQuestions: string,
     selectedCategory: string
   ): string {
-    let finalString: string = "Questions";
+    let finalString: string = "Multiple Choice Questions";
     switch (selectedCategory) {
       case "Questions":
-        finalString = "Question";
+        finalString = "Multiple Choice Question";
         break;
       case "Flashcards":
         finalString = "Flashcard";
@@ -252,7 +252,7 @@ export class PageComponent implements AfterViewInit {
         finalString = "Key Learning Point";
         break;
       default:
-        finalString = "Questions";
+        finalString = "Multiple Choice Questions";
     }
     if (parseInt(numberOfQuestions) > 1) {
       finalString = numberOfQuestions + " " + finalString + "s";
