@@ -81,6 +81,9 @@ export class PageComponent implements AfterViewInit {
 
   finalQuestion: string = "";
 
+  finalAnswer: string = "";
+  finalReplacedAnswer: string = "";
+
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {}
@@ -323,12 +326,20 @@ export class PageComponent implements AfterViewInit {
   // ** Revert to above TODO mentioned method if this doesn't work. Tried to solved deprecation issue.
   sendToChatGptClient() {
     const dataObj = {
-      data: this.finalQuestion,
+      query: this.finalQuestion,
     };
+    console.log(dataObj);
+    let finalAnswer = "";
     this.apiService.sendGeneratedQuestionApi(dataObj).subscribe({
-      next(response: any) {
+      next: (response: any) => {
         console.log("Response from sendGeneratedQuestionApi() is: ", response);
         console.log("Successfully sent to chatGPT client :)");
+        finalAnswer = response.data;
+      },
+      complete: () => {
+        this.finalAnswer = finalAnswer;
+        console.log(this.finalAnswer);
+        this.setGeneratedQuestion(this.finalAnswer);
       },
       error(error: any) {
         console.log(
@@ -337,6 +348,14 @@ export class PageComponent implements AfterViewInit {
         );
       },
     });
+  }
+
+  setGeneratedQuestion(recievedQuestion: string) {
+    console.log("setGeneratedQuestion started..")
+    let tempArr = this.finalAnswer.split("\n");
+    this.scrollToBottom();
+    console.log(tempArr);
+    console.log(this.finalReplacedAnswer);
   }
 
   // onItemElementsChanged(): void {

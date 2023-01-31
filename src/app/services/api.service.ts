@@ -14,6 +14,6 @@ export class ApiService {
   sendGeneratedQuestionApi(
     generatedFinalQuestion: sendGeneratedQuestionApiModel
   ) {
-    return this.http.post(`${this.url}`, generatedFinalQuestion);
+    return this.http.post(`${this.url}/generate`, generatedFinalQuestion, {});
   }
 }
