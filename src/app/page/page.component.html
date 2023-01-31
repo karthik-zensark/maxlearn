@@ -20,13 +20,13 @@
         </p-autoComplete>
       </span>
       <button
-        *ngIf="this.selectedCategory.length == 0"
+        *ngIf="this.selectedCategory.name.length == 0"
         class="page__content__group__button cursor-notallowed"
       >
         Continue
       </button>
       <button
-        *ngIf="this.selectedCategory.length != 0"
+        *ngIf="this.selectedCategory.name.length != 0"
         class="page__content__group__button cursor-pointer"
         (click)="showTopicsMethod()"
       >
@@ -35,7 +35,7 @@
     </span>
 
     <span
-      *ngIf="showTopics && this.selectedCategory.length != 0"
+      *ngIf="showTopics && this.selectedCategory.name.length != 0"
       class="page__content__group"
     >
       <label class="page__content__group__label"

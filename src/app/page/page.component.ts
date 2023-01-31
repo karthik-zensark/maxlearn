@@ -7,6 +7,11 @@ import {
   ViewChild,
   ViewChildren,
 } from "@angular/core";
+import {
+  generalDropdown,
+  learningLevelDropdown,
+  questionNumberDropdown,
+} from "../models/pageModels/page.models";
 import { ApiService } from "../services/api.service";
 
 @Component({
@@ -18,22 +23,22 @@ export class PageComponent implements AfterViewInit {
   @ViewChild("scrollFrame", { static: false })
   scrollFrame!: ElementRef;
   // @ViewChildren("scrollFrame") itemElements!: QueryList<any>;
-  scrollContainer: any;
+  scrollContainer: ElementRef["nativeElement"];
   isNearBottom: boolean = false;
   ifItems: string[] = [];
 
-  selectedCategory: any[] = [];
-  filteredCategory: any = [];
-  category: any[] = [
+  selectedCategory: generalDropdown = { id: "", name: "" };
+  filteredCategory: generalDropdown[] = [];
+  category: generalDropdown[] = [
     { name: "Questions", id: "1" },
     { name: "Flashcards", id: "2" },
     { name: "Key Learning Points (KLPs)", id: "3" },
   ];
 
   showTopics: boolean = false;
-  selectedTopic = { id: "", name: "" };
-  filteredTopics: any = [];
-  topics: any[] = [
+  selectedTopic: generalDropdown = { id: "", name: "" };
+  filteredTopics: generalDropdown[] = [];
+  topics: generalDropdown[] = [
     { name: "Anti-money Laundering", id: "1" },
     { name: "Fraud", id: "2" },
     { name: "Anti-bribery / Anti-corruption", id: "3" },
@@ -47,10 +52,10 @@ export class PageComponent implements AfterViewInit {
   clientInputOneSkipped: boolean = true;
   isClientInputOneDisabled: boolean = false;
   showQuestionNumber: boolean = false;
-  selectedQuestionNum = { number: "1", id: "1" };
-  filteredQuestionNumbers: any[] = [];
+  selectedQuestionNum: questionNumberDropdown = { number: "1", id: "1" };
+  filteredQuestionNumbers: questionNumberDropdown[] = [];
 
-  questionNumbers: any[] = [
+  questionNumbers: questionNumberDropdown[] = [
     { number: "1", id: "1" },
     { number: "2", id: "2" },
     { number: "3", id: "3" },
@@ -58,11 +63,11 @@ export class PageComponent implements AfterViewInit {
     { number: "5", id: "5" },
   ];
 
-  learningLevelObj = { name: "", key: "" };
+  learningLevelObj: learningLevelDropdown = { name: "", key: "" };
 
-  selectedLearningLevel: { name: ""; key: "" }[] = [];
+  selectedLearningLevel: learningLevelDropdown[] = [];
 
-  learningLevels: any[] = [
+  learningLevels: learningLevelDropdown[] = [
     { name: "Awareness", key: "A" },
     { name: "Explanatory", key: "M" },
     { name: "Practitioner", key: "P" },
@@ -89,10 +94,10 @@ export class PageComponent implements AfterViewInit {
   }
 
   showTopicsMethod() {
-    if (this.selectedCategory.length == 0) {
+    if (this.selectedCategory.name.length == 0) {
       this.showTopics = false;
     }
-    if (this.selectedCategory.length != 0) {
+    if (this.selectedCategory.name.length != 0) {
       this.showTopics = true;
     }
   }
@@ -107,8 +112,9 @@ export class PageComponent implements AfterViewInit {
   }
 
   filterCategory(event: any) {
+    console.log(event);
     console.log("selectedCategory: ", this.selectedCategory);
-    let filtered: any[] = [];
+    let filtered: generalDropdown[] = [];
     let query = event.query;
     for (let i = 0; i < this.category.length; i++) {
       let category = this.category[i];
@@ -122,7 +128,7 @@ export class PageComponent implements AfterViewInit {
 
   filterTopic(event: any) {
     console.log("selectedTopic: ", this.selectedTopic);
-    let filtered: any[] = [];
+    let filtered: generalDropdown[] = [];
     let query = event.query;
     for (let i = 0; i < this.topics.length; i++) {
       let topic = this.topics[i];
@@ -154,7 +160,7 @@ export class PageComponent implements AfterViewInit {
 
   filterQuestionNumber(event: any) {
     console.log("selectedQuestionNumbers: ", this.selectedQuestionNum);
-    let filtered: any[] = [];
+    let filtered: questionNumberDropdown[] = [];
     let query = event.query;
     for (let i = 0; i < this.questionNumbers.length; i++) {
       let questionNumber = this.questionNumbers[i];
@@ -209,30 +215,59 @@ export class PageComponent implements AfterViewInit {
     });
     console.log("selectedNames: ", selectedNames);
     if (!isInputOneSkipped) {
-      this.finalQuestion = `Generate ${
-        this.selectedQuestionNum.number
-      } ${this.questionTagChanger(this.selectedQuestionNum.number)} on ${
-        this.selectedTopic.name
-      } with based on the content ${
+      this.finalQuestion = `Generate ${this.questionTagChanger(
+        this.selectedQuestionNum.number,
+        this.selectedCategory.name
+      )} on ${this.selectedTopic.name} with based on the content ${
         this.clientInputOne
-      } supporting ${selectedNames.toString()}`;
+      } supporting ${selectedNames.toString()}. ${this.highlightTagProvider(
+        this.selectedCategory.name
+      )}`;
     } else if (isInputOneSkipped) {
-      this.finalQuestion = `Generate ${
-        this.selectedQuestionNum.number
-      } ${this.questionTagChanger(this.selectedQuestionNum.number)} on ${
-        this.selectedTopic.name
-      } with a focus on ${
+      this.finalQuestion = `Generate ${this.questionTagChanger(
+        this.selectedQuestionNum.number,
+        this.selectedCategory.name
+      )} on ${this.selectedTopic.name} with a focus on ${
         this.clientInputTwo
-      } supporting ${selectedNames.toString()}`;
+      } supporting ${selectedNames.toString()}. ${this.highlightTagProvider(
+        this.selectedCategory.name
+      )}`;
     }
     console.log("Final Question is: ", this.finalQuestion);
   }
 
-  questionTagChanger(numberOfQuestions: string): string {
+  questionTagChanger(
+    numberOfQuestions: string,
+    selectedCategory: string
+  ): string {
+    let finalString: string = "Questions";
+    switch (selectedCategory) {
+      case "Questions":
+        finalString = "Question";
+        break;
+      case "Flashcards":
+        finalString = "Flashcard";
+        break;
+      case "Key Learning Points (KLPs)":
+        finalString = "Key Learning Point";
+        break;
+      default:
+        finalString = "Questions";
+    }
     if (parseInt(numberOfQuestions) > 1) {
-      return "questions";
+      finalString = numberOfQuestions + " " + finalString + "s";
+    } else if (parseInt(numberOfQuestions) == 1) {
+      finalString = numberOfQuestions + " " + finalString;
+    }
+    return finalString;
+  }
+
+  highlightTagProvider(selectedCategory: string): string {
+    let highlightTag = "Highlight the correct answer and provide feedback.";
+    if (this.selectedCategory.name === this.category[0].name) {
+      return highlightTag;
     } else {
-      return "question";
+      return "";
     }
   }
 
@@ -250,7 +285,7 @@ export class PageComponent implements AfterViewInit {
   }
 
   @HostListener("window:scroll", ["$event"]) // <- Add scroll listener to window
-  scrolled(event: any): void {
+  scrolled(event: Event): void {
     this.isNearBottom = this.isUserNearBottom();
   }
 
@@ -269,19 +304,38 @@ export class PageComponent implements AfterViewInit {
     }, 20);
   }
 
+  // TODO: Working on the same method to resolve the deprecated way : RxJS subscribe, signature taking separate callback arguments
+  // sendToChatGptClient() {
+  //   this.apiService.sendGeneratedQuestionApi(this.finalQuestion).subscribe(
+  //     (response: any) => {
+  //       console.log("Response from sendGeneratedQuestionApi() is: ", response);
+  //       console.log("Successfully sent to chatGPT client :)");
+  //     },
+  //     (error) => {
+  //       console.log(
+  //         "There has been an error sending the generated question. err is: ",
+  //         error
+  //       );
+  //     }
+  //   );
+  // }
+
   sendToChatGptClient() {
-    this.apiService.sendGeneratedQuestionApi(this.finalQuestion).subscribe(
-      (response: any) => {
+    const dataObj = {
+      data: this.finalQuestion,
+    };
+    this.apiService.sendGeneratedQuestionApi(dataObj).subscribe({
+      next(response: any) {
         console.log("Response from sendGeneratedQuestionApi() is: ", response);
         console.log("Successfully sent to chatGPT client :)");
       },
-      (error) => {
+      error(error: any) {
         console.log(
           "There has been an error sending the generated question. err is: ",
           error
         );
-      }
-    );
+      },
+    });
   }
 
   // onItemElementsChanged(): void {
