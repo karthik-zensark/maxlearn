@@ -304,7 +304,7 @@ export class PageComponent implements AfterViewInit {
     }, 20);
   }
 
-  // TODO: Working on the same method to resolve the deprecated way : RxJS subscribe, signature taking separate callback arguments
+  // TODO: Working on deprecation issue RxJS subscribe, signature taking separate callback arguments.
   // sendToChatGptClient() {
   //   this.apiService.sendGeneratedQuestionApi(this.finalQuestion).subscribe(
   //     (response: any) => {
@@ -320,6 +320,7 @@ export class PageComponent implements AfterViewInit {
   //   );
   // }
 
+  // ** Revert to above TODO mentioned method if this doesn't work. Tried to solved deprecation issue.
   sendToChatGptClient() {
     const dataObj = {
       data: this.finalQuestion,
