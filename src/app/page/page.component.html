@@ -233,26 +233,31 @@
       </span>
     </span>
   </div>
-</div>
-<div *ngIf="this.finalQuestion.length != 0" class="p-3">
-  <div class="text-center page__content__group__finalQuestion-heading py-1">
-    Final Question is:
-  </div>
-  <span class="d-flex justify-center page__content__group__finalQuestion py-1">
-    {{ this.finalQuestion }}</span
-  >
-  <span class="d-flex justify-center py-1">
-    <button
-      class="page__content__group__button-nomargin cursor-pointer"
-      (click)="sendToChatGptClient()"
+  <div *ngIf="this.finalQuestion.length != 0" class="p-3">
+    <div class="text-center page__content__group__finalQuestion-heading py-1">
+      Final Question is:
+    </div>
+    <span
+      class="d-flex justify-center page__content__group__finalQuestion py-1"
     >
-      Submit to ChatGPT
-    </button>
-  </span>
-</div>
-<div *ngIf="this.finalReplacedAnswer.length != 0" class="p-3">
-  <div class="text-center page__content__group__finalQuestion-heading py-1">
-    Generated Answer is:
+      {{ this.finalQuestion }}</span
+    >
+    <span class="d-flex justify-center py-1">
+      <button
+        class="page__content__group__button-nomargin cursor-pointer"
+        (click)="sendToChatGptClient()"
+      >
+        Submit to ChatGPT
+      </button>
+    </span>
   </div>
-  <span [innerHTML]="this.finalReplacedAnswer" class="d-flex justify-center page__content__group__finalQuestion py-1"></span>
+  <div *ngIf="this.finalReplacedAnswer.length != 0" class="p-3">
+    <div class="text-center page__content__group__finalQuestion-heading">
+      Generated Response is:
+    </div>
+    <span
+      [innerHTML]="this.finalReplacedAnswer"
+      class="d-flex justify-center page__content__group__finalQuestion"
+    ></span>
+  </div>
 </div>

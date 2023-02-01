@@ -258,19 +258,37 @@ export class PageComponent implements AfterViewInit {
         finalString = "Multiple Choice Questions";
     }
     if (parseInt(numberOfQuestions) > 1) {
-      finalString = numberOfQuestions + " " + finalString + "s";
+      finalString =
+        numberOfQuestions +
+        " " +
+        finalString +
+        "s" +
+        " " +
+        "where Question must be Q followed by Question number";
     } else if (parseInt(numberOfQuestions) == 1) {
-      finalString = numberOfQuestions + " " + finalString;
+      finalString =
+        numberOfQuestions +
+        " " +
+        finalString +
+        " " +
+        "where Question must be Q followed by Question number";
     }
     return finalString;
   }
 
   highlightTagProvider(selectedCategory: string): string {
+    // ** asking chatGPT to provide response in a formatted HTML structure
+    // let highlightTag =
+    // "Highlight the correct answer and provide feedback. and structure the response in a html document";
+    // ** without formatting the response in HTML
     let highlightTag = "Highlight the correct answer and provide feedback.";
     if (this.selectedCategory.name === this.category[0].name) {
       return highlightTag;
     } else {
-      return "";
+      // ** asking chatGPT to provide response in a formatted HTML structure
+      // return "and structure the response in a html document";
+      // ** without formatting the response in HTML
+      return " ";
     }
   }
 
@@ -351,11 +369,35 @@ export class PageComponent implements AfterViewInit {
   }
 
   setGeneratedQuestion(recievedQuestion: string) {
-    console.log("setGeneratedQuestion started..")
-    let tempArr = this.finalAnswer.split("\n");
-    this.scrollToBottom();
-    console.log(tempArr);
+    console.log("setGeneratedQuestion started..");
+    this.finalReplacedAnswer = this.finalAnswer.replace(/\n{2}/g, "</br></br>");
+    this.finalReplacedAnswer = this.finalReplacedAnswer.replace(
+      /\n/g,
+      "</br></br>"
+    );
+    // let tempArr = this.finalAnswer.split("\n");
+    // let tempArr0 = tempArr[2].split(" ");
+    // let questionsArr: any[] = [];
+    // tempArr.forEach((ele, eleIndex) => {
+    //   let isQuestion = ele.search(/^Q/);
+    //   let allArr: any[] = [];
+    //   console.log(isQuestion);
+    //   if (isQuestion == 0) {
+    //     if (allArr.length > 0) {
+    //       questionsArr.push(allArr);
+    //       allArr = [];
+    //     }
+    //     allArr.push(ele);
+    //   } else if (isQuestion == -1) {
+    //     allArr.push(ele);
+    //   }
+    // });
+    // console.log(questionsArr);
+    // this.scrollToBottom();
+    // console.log(tempArr);
+    // console.log(tempArr0);
     console.log(this.finalReplacedAnswer);
+    this.scrollToBottom();
   }
 
   // onItemElementsChanged(): void {
