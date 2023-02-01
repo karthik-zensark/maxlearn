@@ -259,5 +259,15 @@
       [innerHTML]="this.finalReplacedAnswer"
       class="d-flex justify-center page__content__group__finalQuestion"
     ></span>
+    <br />
+    <br />
+    <div class="text-center page__content__group__finalQuestion-heading">
+      Token Information: <br /><br />
+      <span class="d-flex justify-center page__content__group__finalQuestion">
+        Completion tokens: {{ tokens.completion_tokens }} <br />
+        Prompt tokens: {{ tokens.prompt_tokens }} <br />
+        Total tokens: {{ tokens.total_tokens }} <br />
+      </span>
+    </div>
   </div>
 </div>

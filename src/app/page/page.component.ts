@@ -83,6 +83,11 @@ export class PageComponent implements AfterViewInit {
 
   finalAnswer: string = "";
   finalReplacedAnswer: string = "";
+  tokens = {
+    completion_tokens: 0,
+    prompt_tokens: 0,
+    total_tokens: 0,
+  };
 
   constructor(private apiService: ApiService) {}
 
@@ -348,14 +353,23 @@ export class PageComponent implements AfterViewInit {
     };
     console.log(dataObj);
     let finalAnswer = "";
+    let finalTokens = {
+      completion_tokens: 0,
+      prompt_tokens: 0,
+      total_tokens: 0,
+    };
     this.apiService.sendGeneratedQuestionApi(dataObj).subscribe({
       next: (response: any) => {
         console.log("Response from sendGeneratedQuestionApi() is: ", response);
         console.log("Successfully sent to chatGPT client :)");
         finalAnswer = response.data;
+        finalTokens = response.tokens;
       },
       complete: () => {
         this.finalAnswer = finalAnswer;
+        this.tokens.completion_tokens = finalTokens.completion_tokens;
+        this.tokens.prompt_tokens = finalTokens.prompt_tokens;
+        this.tokens.total_tokens = finalTokens.total_tokens;
         console.log(this.finalAnswer);
         this.setGeneratedQuestion(this.finalAnswer);
       },
@@ -370,7 +384,10 @@ export class PageComponent implements AfterViewInit {
 
   setGeneratedQuestion(recievedQuestion: string) {
     console.log("setGeneratedQuestion started..");
-    this.finalReplacedAnswer = this.finalAnswer.replace(/\n{2}/g, "</br></br>");
+    this.finalReplacedAnswer = this.finalAnswer.replace(
+      /\n{2}/g,
+      "</br></br></br>"
+    );
     this.finalReplacedAnswer = this.finalReplacedAnswer.replace(
       /\n/g,
       "</br></br>"
