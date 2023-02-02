@@ -81,6 +81,7 @@ export class PageComponent implements AfterViewInit {
 
   finalQuestion: string = "";
 
+  showLoader: boolean = false;
   finalAnswer: string = "";
   finalReplacedAnswer: string = "";
   tokens = {
@@ -95,7 +96,9 @@ export class PageComponent implements AfterViewInit {
 
   constructor(private apiService: ApiService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.removeServiceItemsOnInit();
+  }
 
   ngAfterViewInit() {
     this.scrollContainer = this.scrollFrame.nativeElement;
@@ -103,6 +106,10 @@ export class PageComponent implements AfterViewInit {
     //   console.log("syke");
     //   this.onItemElementsChanged();
     // });
+  }
+
+  removeServiceItemsOnInit() {
+    this.apiService.generatedQuestion = "";
   }
 
   showTopicsMethod() {
@@ -206,12 +213,14 @@ export class PageComponent implements AfterViewInit {
     ) {
       this.showClientInputTwo = false;
       this.generateFinalQuestion(this.clientInputOneSkipped);
+      this.setServiceItems();
     }
   }
 
   clientInputTwoMethod() {
     if (this.clientInputTwo.length != 0) {
       this.generateFinalQuestion(this.clientInputOneSkipped);
+      this.setServiceItems();
     }
   }
 
@@ -386,9 +395,18 @@ export class PageComponent implements AfterViewInit {
   //     }
   //   );
   // }
+  setServiceItems() {
+    this.apiService.generatedQuestion = this.finalQuestion;
+    this.apiService.selectedCategory = this.selectedCategory;
+    this.apiService.selectedTopic = this.selectedTopic;
+    this.apiService.selectedQuestionNum = this.selectedQuestionNum;
+    this.apiService.selectedLearningLevel = this.selectedLearningLevel;
+  }
 
   // ** Revert to above TODO mentioned method if this doesn't work. Tried to solved deprecation issue.
   sendToChatGptClient() {
+    this.emptyAllFinalArrays();
+    this.showLoader = true;
     const dataObj = {
       query: this.finalQuestion,
     };
@@ -495,10 +513,10 @@ export class PageComponent implements AfterViewInit {
     this.flashCardsArraySetter(flashcardsArr);
     console.log("Key Points Array ----------> ", keyPointsArr);
     this.keyPointsArraySetter(keyPointsArr);
+    this.showLoader = false;
     this.scrollToBottom();
     console.log(tempArr);
     console.log(this.finalReplacedAnswer);
-    this.scrollToBottom();
   }
 
   questionArraySetter(questionsArray: any[]) {
@@ -647,6 +665,12 @@ export class PageComponent implements AfterViewInit {
       "FInal key points array arr: ----------> ",
       this.finalKeypointsArr
     );
+  }
+
+  emptyAllFinalArrays() {
+    this.finalQuestionsArr = [];
+    this.finalFlashcardsArr = [];
+    this.finalKeypointsArr = [];
   }
 
   // onItemElementsChanged(): void {

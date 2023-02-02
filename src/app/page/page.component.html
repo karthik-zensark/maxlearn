@@ -194,6 +194,7 @@
           *ngIf="this.selectedLearningLevel.length != 0"
           class="page__content__group__button-nomargin cursor-pointer"
           (click)="learningLevelMethod()"
+          routerLink="final"
         >
           Generate
         </button>
@@ -227,6 +228,7 @@
           *ngIf="this.clientInputTwo.length != 0"
           class="page__content__group__button-nomargin cursor-pointer"
           (click)="clientInputTwoMethod()"
+          routerLink="final"
         >
           Generate
         </button>
@@ -271,7 +273,15 @@
       </span>
     </div>
   </div>
-  <!-- ** For complete formatted response (Assuming the chatGPT client send correct info as requested) -->
+  <div *ngIf="this.showLoader" class="d-flex justify-center p-5">
+    <p-progressSpinner
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+  <!-- ** For complete formatted response (Assuming the chatGPT client is sending correct info as requested) -->
   <div
     *ngIf="
       this.finalQuestionsArr.length > 0 ||
@@ -351,3 +361,5 @@
     </div>
   </div>
 </div>
+<!-- ** Test button to check routing -->
+<!-- <button routerLink="final">Go to result</button> -->

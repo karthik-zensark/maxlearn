@@ -5,21 +5,26 @@ import { AppComponent } from "./app.component";
 import { PageComponent } from "./page/page.component";
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { CheckboxModule } from "primeng/checkbox";
+import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { FormsModule } from "@angular/forms";
 import { AccordionModule } from "primeng/accordion"; //accordion and accordion tab
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientModule } from "@angular/common/http";
+import { AppRoutingModule } from './app-routing.module';
+import { FinalComponent } from './final/final.component';
 
 @NgModule({
-  declarations: [AppComponent, PageComponent],
+  declarations: [AppComponent, PageComponent, FinalComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
     AutoCompleteModule,
     CheckboxModule,
+    ProgressSpinnerModule,
     FormsModule,
     AccordionModule,
     BrowserAnimationsModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,0 +1,98 @@
+<!-- <p>final works!</p> -->
+<div *ngIf="this.finalQuestion.length == 0" class="p-5">
+  No question at the moment please generate a question in the previous page.
+</div>
+<div *ngIf="this.finalQuestion.length > 0">
+  <div *ngIf="this.showLoader" class="d-flex justify-center p-5">
+    <p-progressSpinner
+      styleClass="custom-spinner"
+      strokeWidth="8"
+      fill="#EEEEEE"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </div>
+  <!-- ** For complete formatted response (Assuming the chatGPT client is sending correct info as requested) -->
+  <div
+    *ngIf="
+      this.finalQuestionsArr.length > 0 ||
+      this.finalFlashcardsArr.length > 0 ||
+      this.finalKeypointsArr.length > 0
+    "
+    class="p-3"
+  >
+    <div class="text-center page__content__group__finalQuestion-heading">
+      Generated Response is:
+    </div>
+    <div *ngIf="this.finalQuestionsArr.length > 0">
+      <div *ngFor="let finalQuestion of this.finalQuestionsArr">
+        <div>Question :</div>
+        <br />
+        <div *ngFor="let question of finalQuestion">
+          <div>
+            <b>{{ question.question }}</b>
+          </div>
+        </div>
+        <br />
+        <div>Options :</div>
+        <br />
+        <div *ngFor="let question of finalQuestion">
+          <div *ngFor="let option of question.options">
+            {{ option }}
+          </div>
+        </div>
+        <br />
+        <div>Answer :</div>
+        <br />
+        <div *ngFor="let question of finalQuestion">
+          <div>{{ question.answer }}</div>
+        </div>
+        <br />
+        <div>Feedback :</div>
+        <br />
+        <div *ngFor="let question of finalQuestion">
+          <div>{{ question.feedback }}</div>
+        </div>
+        <br />
+        <!-- <div class="d-flex">
+          <button>Edit</button>
+          <button>Push to Maxlearn</button>
+          <button>Delete</button>
+        </div> -->
+      </div>
+    </div>
+    <div *ngIf="this.finalFlashcardsArr.length > 0">
+      <div *ngFor="let finalFlashCard of this.finalFlashcardsArr">
+        <div>Question :</div>
+        <br />
+        <div *ngFor="let flashCard of finalFlashCard">
+          <div>{{ flashCard.question }}</div>
+        </div>
+        <br />
+        <div>Answer :</div>
+        <br />
+        <div *ngFor="let flashCard of finalFlashCard">
+          <div>{{ flashCard.answer }}</div>
+        </div>
+        <br />
+      </div>
+    </div>
+    <div *ngIf="this.finalKeypointsArr.length > 0">
+      <div>Keypoints :</div>
+      <br />
+      <div *ngFor="let finalKeyPoint of this.finalKeypointsArr">
+        <div *ngFor="let keyPoint of finalKeyPoint">
+          <div>{{ keyPoint.keyPoint }}</div>
+        </div>
+        <br />
+      </div>
+    </div>
+    <div class="text-center page__content__group__finalQuestion-heading">
+      Token Information: <br /><br />
+      <span class="d-flex justify-center page__content__group__finalQuestion">
+        Completion tokens: {{ tokens.completion_tokens }} <br />
+        Prompt tokens: {{ tokens.prompt_tokens }} <br />
+        Total tokens: {{ tokens.total_tokens }} <br />
+      </span>
+    </div>
+  </div>
+</div>
