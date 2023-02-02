@@ -1,4 +1,5 @@
 <!-- <p>final works!</p> -->
+<button class="button-back" routerLink=""><b>< Go back</b></button>
 <div *ngIf="this.finalQuestion.length == 0" class="p-5">
   No question at the moment please generate a question in the previous page.
   <br />
@@ -98,7 +99,8 @@
               <div
                 *ngFor="
                   let option of finalQuestion[1].options;
-                  let optionIndex = index
+                  let optionIndex = index;
+                  trackBy: trackByFn
                 "
               >
                 <input

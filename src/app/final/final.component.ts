@@ -347,6 +347,10 @@ export class FinalComponent implements OnInit {
     console.log(this.revertFinalQuestionsArr);
   }
 
+  trackByFn(index: any, item: any) {
+    return index;
+  }
+
   deleteQuestion(index: number) {
     this.finalQuestionsArr.splice(index, 1);
     console.log(this.finalQuestionsArr);
