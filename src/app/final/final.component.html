@@ -1,6 +1,8 @@
 <!-- <p>final works!</p> -->
 <div *ngIf="this.finalQuestion.length == 0" class="p-5">
   No question at the moment please generate a question in the previous page.
+  <br />
+  <b>Redirecting to main form page..</b>
 </div>
 <div *ngIf="this.finalQuestion.length > 0">
   <div *ngIf="this.showLoader" class="d-flex justify-center p-5">
@@ -56,46 +58,243 @@
             <div>{{ question.feedback }}</div>
           </div>
           <br />
-          <div class="d-flex">
-            <button (click)="this.editFormTrigger(finalQuestionIndex)">
+          <div class="d-flex col-gap">
+            <button
+              class="button-back"
+              (click)="this.editFormTrigger(finalQuestionIndex)"
+            >
               Edit
             </button>
-            <button>Push to Maxlearn</button>
-            <button>Delete</button>
+            <button
+              (click)="this.pushToMaxLearnArr('questions', 1)"
+              class="button-gen"
+            >
+              Push to Maxlearn
+            </button>
+            <button
+              class="button-del"
+              (click)="this.deleteQuestion(finalQuestionIndex)"
+            >
+              Delete
+            </button>
           </div>
+          <br />
         </div>
         <div *ngIf="this.formHandlerArr[finalQuestionIndex] == 1">
-          EDIT FORM
+          Edit Form {{ finalQuestionIndex + 1 }}
+          <div>
+            <form>
+              <div><b>Question: </b></div>
+              <div>
+                <input
+                  class="input-text"
+                  type="text"
+                  pInputText
+                  [(ngModel)]="finalQuestion[0].question"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+              <div><b>Options: </b></div>
+              <div
+                *ngFor="
+                  let option of finalQuestion[1].options;
+                  let optionIndex = index
+                "
+              >
+                <input
+                  class="input-text"
+                  type="text"
+                  pInputText
+                  [(ngModel)]="finalQuestion[1].options[optionIndex]"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+              <div><b>Answer: </b></div>
+              <div>
+                <input
+                  class="input-text"
+                  type="text"
+                  pInputText
+                  [(ngModel)]="finalQuestion[2].answer"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+              <div><b>Feedback: </b></div>
+              <div>
+                <input
+                  class="input-text"
+                  type="text"
+                  pInputText
+                  [(ngModel)]="finalQuestion[3].feedback"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </form>
+            <br />
+            <div class="d-flex col-gap">
+              <button
+                class="button-back"
+                (click)="this.formRemover(finalQuestionIndex)"
+              >
+                Back
+              </button>
+              <button class="button-del">Discard</button>
+              <button class="button-gen" (click)="this.setItems()">Save</button>
+            </div>
+            <br />
+          </div>
         </div>
       </div>
     </div>
     <div *ngIf="this.finalFlashcardsArr.length > 0">
-      <div *ngFor="let finalFlashCard of this.finalFlashcardsArr">
-        <div><b>Question :</b></div>
-        <div *ngFor="let flashCard of finalFlashCard">
+      <div
+        *ngFor="
+          let finalFlashCard of this.finalFlashcardsArr;
+          let finalFlashcardIndex = index
+        "
+      >
+        <div *ngIf="this.formHandlerArr[finalFlashcardIndex] == 0">
+          <div><b>Question :</b></div>
+          <div *ngFor="let flashCard of finalFlashCard">
+            <div>
+              <b>{{ flashCard.question }}</b>
+            </div>
+          </div>
+          <br />
+          <div><b>Answer :</b></div>
+          <div *ngFor="let flashCard of finalFlashCard">
+            <div>{{ flashCard.answer }}</div>
+          </div>
+          <br />
+          <div class="d-flex col-gap">
+            <button
+              class="button-back"
+              (click)="this.editFormTrigger(finalFlashcardIndex)"
+            >
+              Edit
+            </button>
+            <button
+              (click)="this.pushToMaxLearnArr('flashCards', 1)"
+              class="button-gen"
+            >
+              Push to Maxlearn
+            </button>
+            <button
+              class="button-del"
+              (click)="this.deleteFlashcard(finalFlashcardIndex)"
+            >
+              Delete
+            </button>
+          </div>
+          <br />
+        </div>
+        <div *ngIf="this.formHandlerArr[finalFlashcardIndex] == 1">
           <div>
-            <b>{{ flashCard.question }}</b>
+            <form>
+              <div><b>Question: </b></div>
+              <div>
+                <input
+                  class="input-text"
+                  type="text"
+                  pInputText
+                  [(ngModel)]="finalFlashCard[0].question"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+              <div><b>Answer: </b></div>
+              <div>
+                <input
+                  class="input-text"
+                  type="text"
+                  pInputText
+                  [(ngModel)]="finalFlashCard[1].answer"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </form>
+            <br />
+            <div class="d-flex col-gap">
+              <button
+                class="button-back"
+                (click)="this.formRemover(finalFlashcardIndex)"
+              >
+                Back
+              </button>
+              <button class="button-del">Discard</button>
+              <button class="button-gen" (click)="this.setItems()">Save</button>
+            </div>
+            <br />
           </div>
         </div>
-        <br />
-        <div><b>Answer :</b></div>
-        <div *ngFor="let flashCard of finalFlashCard">
-          <div>{{ flashCard.answer }}</div>
-        </div>
-        <br />
       </div>
     </div>
     <div *ngIf="this.finalKeypointsArr.length > 0">
       <div><b>Keypoints :</b></div>
-      <div *ngFor="let finalKeyPoint of this.finalKeypointsArr">
-        <div *ngFor="let keyPoint of finalKeyPoint">
-          <div>{{ keyPoint.keyPoint }}</div>
+      <div
+        *ngFor="
+          let finalKeyPoint of this.finalKeypointsArr;
+          let finalKeyPointIndex = index
+        "
+      >
+        <div *ngIf="this.formHandlerArr[finalKeyPointIndex] == 0">
+          <div *ngFor="let keyPoint of finalKeyPoint">
+            <div>{{ keyPoint.keyPoint }}</div>
+          </div>
+          <br />
+          <div class="d-flex col-gap">
+            <button
+              class="button-back"
+              (click)="this.editFormTrigger(finalKeyPointIndex)"
+            >
+              Edit
+            </button>
+            <button
+              (click)="this.pushToMaxLearnArr('keyPoints', 1)"
+              class="button-gen"
+            >
+              Push to Maxlearn
+            </button>
+            <button
+              class="button-del"
+              (click)="this.deleteKeyPoint(finalKeyPointIndex)"
+            >
+              Delete
+            </button>
+          </div>
+          <br />
         </div>
-        <br />
+        <div *ngIf="this.formHandlerArr[finalKeyPointIndex] == 1">
+          <div>
+            <form>
+              <div><b>Key Point: </b></div>
+              <div>
+                <input
+                  class="input-text"
+                  type="text"
+                  pInputText
+                  [(ngModel)]="finalKeyPoint[0].keyPoint"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+            </form>
+            <br />
+            <div class="d-flex col-gap">
+              <button
+                class="button-back"
+                (click)="this.formRemover(finalKeyPointIndex)"
+              >
+                Back
+              </button>
+              <button class="button-del">Discard</button>
+              <button class="button-gen" (click)="this.setItems()">Save</button>
+            </div>
+            <br />
+          </div>
+        </div>
       </div>
     </div>
     <div class="text-center page__content__group__finalQuestion-heading">
-      Token Information: <br /><br />
+      <b>Token Information:</b> <br /><br />
       <span class="d-flex justify-center page__content__group__finalQuestion">
         Completion tokens: {{ tokens.completion_tokens }} <br />
         Prompt tokens: {{ tokens.prompt_tokens }} <br />

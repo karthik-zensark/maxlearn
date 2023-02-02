@@ -1,0 +1,37 @@
+.input-text {
+  width: -webkit-fill-available;
+}
+
+.col-gap {
+  column-gap: 1rem;
+}
+
+.button-gen {
+  padding: 10px 21px 10px 19px;
+  border-radius: 5px;
+  width: max-content;
+  border: none;
+  background: lightseagreen;
+  color: white;
+  cursor: pointer;
+}
+
+.button-del {
+  padding: 10px 21px 10px 19px;
+  border-radius: 5px;
+  width: max-content;
+  border: none;
+  background: red;
+  color: white;
+  cursor: pointer;
+}
+
+.button-back {
+  padding: 10px 21px 10px 19px;
+  border-radius: 5px;
+  width: max-content;
+  border: none;
+  background: gray;
+  color: white;
+  cursor: pointer;
+}

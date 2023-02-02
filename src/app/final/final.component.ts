@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import {
   generalDropdown,
   learningLevelDropdown,
@@ -24,8 +25,11 @@ export class FinalComponent implements OnInit {
   showLoader: boolean = false;
 
   finalQuestionsArr: any[] = [];
+  revertFinalQuestionsArr: any[] = [];
   finalFlashcardsArr: any[] = [];
+  revertFlashcardsArr: any[] = [];
   finalKeypointsArr: any[] = [];
+  revertKeyPointsArr: any[] = [];
 
   formHandlerArr: number[] = [];
 
@@ -35,7 +39,9 @@ export class FinalComponent implements OnInit {
     total_tokens: 0,
   };
 
-  constructor(private apiService: ApiService) {}
+  maxLearnArray: any[] = [];
+
+  constructor(private apiService: ApiService, public router: Router) {}
 
   ngOnInit(): void {
     this.setInitValues();
@@ -43,6 +49,12 @@ export class FinalComponent implements OnInit {
 
   setInitValues() {
     this.finalQuestion = this.apiService.generatedQuestion;
+    setTimeout(() => {
+      if (this.finalQuestion.length < 1) {
+        this.router.navigate([""]);
+      }
+    }, 3000);
+
     this.selectedCategory = this.apiService.selectedCategory;
     this.selectedTopic = this.apiService.selectedTopic;
     this.selectedQuestionNum = this.apiService.selectedQuestionNum;
@@ -331,5 +343,43 @@ export class FinalComponent implements OnInit {
 
   editFormTrigger(index: number) {
     this.formHandlerArr[index] = 1;
+    this.revertFinalQuestionsArr = this.finalQuestionsArr;
+    console.log(this.revertFinalQuestionsArr);
+  }
+
+  deleteQuestion(index: number) {
+    this.finalQuestionsArr.splice(index, 1);
+    console.log(this.finalQuestionsArr);
+  }
+
+  deleteFlashcard(index: number) {
+    this.finalFlashcardsArr.splice(index, 1);
+    console.log(this.finalFlashcardsArr);
+  }
+
+  deleteKeyPoint(index: number) {
+    this.finalKeypointsArr.splice(index, 1);
+    console.log(this.finalKeypointsArr);
+  }
+
+  formRemover(index: number) {
+    this.formHandlerArr[index] = 0;
+  }
+
+  setItems() {
+    console.log(this.finalQuestionsArr);
+    console.log(this.revertFinalQuestionsArr);
+  }
+
+  pushToMaxLearnArr(arrName: string, index: number) {
+    let takeArr: any[] = [];
+    if (arrName === "questions") {
+      takeArr = this.finalQuestionsArr;
+    } else if (arrName === "flashCards") {
+      takeArr = this.finalFlashcardsArr;
+    } else if (arrName === "keyPoints") {
+      takeArr = this.finalKeypointsArr;
+    }
+    this.maxLearnArray.push(takeArr[index]);
   }
 }
