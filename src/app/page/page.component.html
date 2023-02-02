@@ -194,7 +194,6 @@
           *ngIf="this.selectedLearningLevel.length != 0"
           class="page__content__group__button-nomargin cursor-pointer"
           (click)="learningLevelMethod()"
-          routerLink="final"
         >
           Generate
         </button>
@@ -228,7 +227,6 @@
           *ngIf="this.clientInputTwo.length != 0"
           class="page__content__group__button-nomargin cursor-pointer"
           (click)="clientInputTwoMethod()"
-          routerLink="final"
         >
           Generate
         </button>
@@ -245,9 +243,18 @@
       {{ this.finalQuestion }}</span
     >
     <span class="d-flex justify-center py-1">
-      <button
+      <!-- ** Old Button - (Same Page response) -->
+      <!-- <button
         class="page__content__group__button-nomargin cursor-pointer"
         (click)="sendToChatGptClient()"
+      >
+        Generate Questionnaire
+      </button> -->
+      <!-- ** New button - response in new page (final) -->
+      <button
+        class="page__content__group__button-nomargin cursor-pointer"
+        (click)="this.setServiceItems()"
+        routerLink="final"
       >
         Generate Questionnaire
       </button>

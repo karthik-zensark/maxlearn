@@ -328,4 +328,8 @@ export class FinalComponent implements OnInit {
       this.formHandlerArr.push(0);
     }
   }
+
+  editFormTrigger(index: number) {
+    this.formHandlerArr[index] = 1;
+  }
 }

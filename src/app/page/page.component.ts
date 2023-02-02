@@ -213,15 +213,17 @@ export class PageComponent implements AfterViewInit {
     ) {
       this.showClientInputTwo = false;
       this.generateFinalQuestion(this.clientInputOneSkipped);
-      this.setServiceItems();
+      // ** Direct routing without displaying of question
+      // this.setServiceItems();
     }
   }
 
   clientInputTwoMethod() {
     if (this.clientInputTwo.length != 0) {
       this.generateFinalQuestion(this.clientInputOneSkipped);
-      this.setServiceItems();
     }
+    // ** Direct routing without displaying of question
+    // this.setServiceItems();
   }
 
   generateFinalQuestion(isInputOneSkipped: boolean) {
